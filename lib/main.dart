@@ -7,6 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('auth');
+  await Hive.openBox('form');
   runApp(const MyApp());
 }
 

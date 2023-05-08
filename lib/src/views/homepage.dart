@@ -2,14 +2,17 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:griyatilawah_absesnsi/src/controllers/form_controller.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:griyatilawah_absesnsi/src/views/form_add.dart';
 import 'package:griyatilawah_absesnsi/src/views/listview_absensi.dart';
 import 'package:griyatilawah_absesnsi/src/views/profile.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
   var controller = Get.put(HomeController());
+  var formController = Get.put(FormController());
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +100,104 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.fromLTRB(24, 5, 24, 8),
-                      child: listview_absensi(),
-                    );
-                  },
-                ),
+                child: formController.items.length < 1
+                    ? Center(child: Text('Tidak ada jadwal hari ini'))
+                    : ListView.builder(
+                        itemCount: formController.items.length,
+                        itemBuilder: (context, index) {
+                          final currentItem = formController.items[index];
+                          return Container(
+                            margin: EdgeInsets.fromLTRB(24, 5, 24, 8),
+                            child: Container(
+                                height: 100,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: HexColor('20275D'),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(16.0),
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        child: Container(
+                                      width: 23,
+                                      decoration: BoxDecoration(
+                                        color: HexColor('6DB351'),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16.0),
+                                          bottomLeft: Radius.circular(16.0),
+                                        ),
+                                      ),
+                                    )),
+                                    Positioned(
+                                      top: 10,
+                                      left: 35,
+                                      child: Text(
+                                        currentItem['nama'].toString(),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 40,
+                                      left: 35,
+                                      child: Text(
+                                        currentItem['masjid'].toString(),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 70,
+                                      left: 35,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            controller.tanggal(
+                                                currentItem['tanggal']),
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            " " +
+                                                currentItem['sholat']
+                                                    .toString(),
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    //make button for check in
+                                    Positioned(
+                                      top: 30,
+                                      right: 20,
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text('Absen'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: HexColor('6DB351'),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          );
+                        },
+                      ),
               ),
             ],
           ),

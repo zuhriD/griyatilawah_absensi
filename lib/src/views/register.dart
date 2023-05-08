@@ -13,7 +13,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Form(
-          key: controller.formKey,
+          key: controller.formKeyRegister,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -127,8 +127,9 @@ class RegisterPage extends StatelessWidget {
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600))),
                           onPressed: () {
-                            if (controller.formKey.currentState!.validate()) {
-                              controller.formKey.currentState!.save();
+                            if (controller.formKeyRegister.currentState!
+                                .validate()) {
+                              controller.formKeyRegister.currentState!.save();
                               controller.register();
                             }
                           }),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  var controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {

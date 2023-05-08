@@ -12,7 +12,8 @@ class AuthController extends GetxController {
   User user = User(name: '', email: '', password: '');
 
   // Membuat variable form key
-  final formKey = GlobalKey<FormState>();
+  final formKeylogin = GlobalKey<FormState>();
+  final formKeyRegister = GlobalKey<FormState>();
 
   // Membuat controller
   final controllerEmail = TextEditingController();
@@ -29,21 +30,23 @@ class AuthController extends GetxController {
 
   // Fungsi untuk login
   Future<void> login() async {
-    if (authBox.containsKey(controllerEmail.text) &&
-        authBox.containsKey(controllerPassword.text)) {
+    if (authBox.containsKey('${controllerEmail.text}email')) {
       //how to get data from hive
       user = User(
           name: authBox.get('${controllerEmail.text}name'),
-          email: controllerEmail.text,
-          password: controllerPassword.text);
+          email: authBox.get('${controllerEmail.text}email'),
+          password: authBox.get('${controllerEmail.text}password'));
       if (user.password == controllerPassword.text) {
-        Get.snackbar('Berhasil', 'Login berhasil');
+        Get.snackbar('Berhasil', 'Login berhasil',
+            snackPosition: SnackPosition.BOTTOM);
         Get.offAll(() => HomePage(), arguments: user.name.toString());
       } else {
-        Get.snackbar('Gagal', 'Password salah');
+        Get.snackbar('Gagal', 'Password salah',
+            snackPosition: SnackPosition.BOTTOM);
       }
     } else {
-      Get.snackbar('Gagal', 'Email tidak terdaftar');
+      Get.snackbar('Gagal', 'Email tidak terdaftar',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -56,13 +59,15 @@ class AuthController extends GetxController {
           name: controllerName.text,
           email: controllerEmail.text,
           password: controllerPassword.text);
-      authBox.put(user.email, user.name);
+      authBox.put('${user.email}email', user.name);
       authBox.put('${user.email}name', user.name);
-      authBox.put(user.password, user.password);
-      Get.snackbar('Berhasil', 'Akun berhasil dibuat');
+      authBox.put('${user.email}password', user.password);
+      Get.snackbar('Berhasil', 'Akun berhasil dibuat',
+          snackPosition: SnackPosition.BOTTOM);
       Get.offAll(() => HomePage(), arguments: user.name.toString());
     } else {
-      Get.snackbar('Gagal', 'Email sudah terdaftar');
+      Get.snackbar('Gagal', 'Email sudah terdaftar',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 

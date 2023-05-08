@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class listview_absensi extends StatelessWidget {
-  const listview_absensi({
-    super.key,
-  });
+  // final Map<String, dynamic> data = Get.arguments;
+  var controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class listview_absensi extends StatelessWidget {
               top: 10,
               left: 35,
               child: Text(
-                'Masjid Al-Ikhlas',
+                controller.listKey[0].toString(),
                 style: GoogleFonts.montserrat(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
