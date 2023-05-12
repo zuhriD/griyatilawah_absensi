@@ -1,6 +1,6 @@
 # griyatilawah_absesnsi
 
-A new Flutter project.
+App for attendace imam of griya tilawah
 
 ## Getting Started
 
