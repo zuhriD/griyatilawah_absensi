@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/form_controller.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
+import 'package:griyatilawah_absesnsi/src/services/notifi_service.dart';
 import 'package:griyatilawah_absesnsi/src/views/form_add.dart';
 import 'package:griyatilawah_absesnsi/src/views/listview_absensi.dart';
 import 'package:griyatilawah_absesnsi/src/views/profile.dart';
@@ -100,7 +101,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: formController.items.length < 1
+                child: formController.items.length < 1 &&
+                        controller.name != formController.nama
                     ? Center(child: Text('Tidak ada jadwal hari ini'))
                     : ListView.builder(
                         itemCount: formController.items.length,
@@ -119,17 +121,31 @@ class HomePage extends StatelessWidget {
                                 ),
                                 child: Stack(
                                   children: [
-                                    Positioned(
-                                        child: Container(
-                                      width: 23,
-                                      decoration: BoxDecoration(
-                                        color: HexColor('6DB351'),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16.0),
-                                          bottomLeft: Radius.circular(16.0),
-                                        ),
-                                      ),
-                                    )),
+                                    currentItem['status'] == "belum_hadir"
+                                        ? Positioned(
+                                            child: Container(
+                                            width: 23,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(16.0),
+                                                bottomLeft:
+                                                    Radius.circular(16.0),
+                                              ),
+                                            ),
+                                          ))
+                                        : Positioned(
+                                            child: Container(
+                                            width: 23,
+                                            decoration: BoxDecoration(
+                                              color: HexColor('6DB351'),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(16.0),
+                                                bottomLeft:
+                                                    Radius.circular(16.0),
+                                              ),
+                                            ),
+                                          )),
                                     Positioned(
                                       top: 10,
                                       left: 35,
@@ -178,21 +194,78 @@ class HomePage extends StatelessWidget {
                                       ),
                                     ),
                                     //make button for check in
-                                    Positioned(
-                                      top: 30,
-                                      right: 20,
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text('Absen'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: HexColor('6DB351'),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(16.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    currentItem['status'] == 'belum_hadir'
+                                        ? Positioned(
+                                            top: 30,
+                                            right: 20,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                NotificationService()
+                                                    .showNotification(
+                                                        title:
+                                                            "Jangan lupa absen",
+                                                        body: currentItem[
+                                                                'sholat']
+                                                            .toString());
+                                              },
+                                              child: Text('Absen'),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: HexColor('6DB351'),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16.0),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : currentItem['status'] == 'izin'
+                                            ? Positioned(
+                                                top: 40,
+                                                right: 20,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Izin',
+                                                      style: GoogleFonts
+                                                          .montserrat(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
+                                                    Icon(
+                                                      Icons.check,
+                                                      color: HexColor('6DB351'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Positioned(
+                                                top: 40,
+                                                right: 20,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Sudah Absen',
+                                                      style: GoogleFonts
+                                                          .montserrat(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
+                                                    Icon(
+                                                      Icons.check,
+                                                      color: HexColor('6DB351'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                   ],
                                 )),
                           );

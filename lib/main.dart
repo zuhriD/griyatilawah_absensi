@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:griyatilawah_absesnsi/src/services/notifi_service.dart';
 import 'package:griyatilawah_absesnsi/src/views/login.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
   await Hive.initFlutter();
   await Hive.openBox('auth');
   await Hive.openBox('form');

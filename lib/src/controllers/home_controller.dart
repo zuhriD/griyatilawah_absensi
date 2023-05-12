@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:griyatilawah_absesnsi/src/models/Absensi.dart';
 import 'package:griyatilawah_absesnsi/src/views/login.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_file.dart';
@@ -8,8 +7,10 @@ import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final name = Get.arguments;
+
   // final Absensi data = Get.arguments;
   var formBox;
+  var authBox = Hive.box('auth');
 
   List<dynamic> listJadwal = Hive.box('form').values.toList();
   List<dynamic> listKey = Hive.box('form').keys.toList();
@@ -30,6 +31,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     pageController = PageController(initialPage: currentIndex.value);
+    // var nama = authBox.get(name + 'nama');
+    print(name);
     openBox();
   }
 

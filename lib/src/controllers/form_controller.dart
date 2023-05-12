@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:griyatilawah_absesnsi/src/models/Absensi.dart';
 import 'package:griyatilawah_absesnsi/src/views/homepage.dart';
@@ -15,6 +16,7 @@ class FormController extends GetxController {
 
   //form box
   final formBox = Hive.box('form');
+  final authBox = Hive.box('auth');
   var controllerHome = Get.put(HomeController());
 
   // Fungsi untuk membuka box
@@ -87,10 +89,12 @@ class FormController extends GetxController {
   }
 
   List<Map<String, dynamic>> items = [];
+  var nama = '';
 
   void refreshItems() {
     final data = formBox.keys.map((key) {
       final item = formBox.get(key);
+      print(authBox.get('kkkname'));
       return {
         "key": key,
         "nama": item['nama'],
@@ -103,7 +107,6 @@ class FormController extends GetxController {
     }).toList();
 
     items = data.reversed.toList();
-    print(items.length);
   }
 
   //create item
@@ -116,6 +119,108 @@ class FormController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       snackStyle: SnackStyle.FLOATING,
     );
+    Get.offAll(() => HomePage(), arguments: newItem['nama']);
+  }
+
+  //update item
+  Future<void> updateItem(int itemKey, Map<String, dynamic> item) async {
+    await formBox.put(itemKey, item);
+    refreshItems();
+    Get.snackbar(
+      'Berhasil',
+      'Data berhasil diubah',
+      snackPosition: SnackPosition.BOTTOM,
+      snackStyle: SnackStyle.FLOATING,
+    );
     Get.offAll(() => HomePage());
+  }
+
+  void showform(
+      BuildContext ctx, int? itemKey, Map<String, dynamic> item) async {
+    if (itemKey != null) {
+      final existingItem =
+          items.firstWhere((element) => element['key'] == itemKey);
+      controllerKeterangan.text = existingItem['keterangan'];
+    }
+    showModalBottomSheet(
+        context: ctx,
+        elevation: 5,
+        isScrollControlled: true,
+        builder: (_) => Container(
+              padding: EdgeInsets.all(20),
+              child: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: controllerKeterangan,
+                      decoration: InputDecoration(
+                        hintText: 'Keterangan',
+                        labelText: 'Keterangan',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              if (itemKey != null) {
+                                updateItem(itemKey, {
+                                  "nama": item['nama'],
+                                  "masjid": item['masjid'],
+                                  "tanggal": item['tanggal'],
+                                  "sholat": item['sholat'],
+                                  "keterangan":
+                                      controllerKeterangan.text.trim(),
+                                  "status": 'Hadir',
+                                });
+                              }
+                            },
+                            child: Text(
+                              'Hadir',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            )),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (itemKey != null) {
+                                updateItem(itemKey, {
+                                  "nama": item['nama'],
+                                  "masjid": item['masjid'],
+                                  "tanggal": item['tanggal'],
+                                  "sholat": item['sholat'],
+                                  "keterangan":
+                                      controllerKeterangan.text.trim(),
+                                  "status": 'izin',
+                                });
+                              }
+                            },
+                            child: Text(
+                              'Izin',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ));
   }
 }

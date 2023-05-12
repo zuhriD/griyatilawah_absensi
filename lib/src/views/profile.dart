@@ -44,6 +44,7 @@ class ProfilePage extends StatelessWidget {
         Padding(padding: EdgeInsets.only(top: 20)),
         CircleAvatar(
           radius: 50,
+          backgroundImage: AssetImage('assets/user.png'),
         ),
         Padding(padding: EdgeInsets.only(top: 20)),
         Row(
@@ -59,7 +60,7 @@ class ProfilePage extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(left: 20)),
             Text(
-              'Nama',
+              controller.name,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

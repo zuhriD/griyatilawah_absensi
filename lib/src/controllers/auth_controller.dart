@@ -59,12 +59,12 @@ class AuthController extends GetxController {
           name: controllerName.text,
           email: controllerEmail.text,
           password: controllerPassword.text);
-      authBox.put('${user.email}email', user.name);
+      authBox.put('${user.email}email', user.email);
       authBox.put('${user.email}name', user.name);
       authBox.put('${user.email}password', user.password);
       Get.snackbar('Berhasil', 'Akun berhasil dibuat',
           snackPosition: SnackPosition.BOTTOM);
-      Get.offAll(() => HomePage(), arguments: user.name.toString());
+      Get.offAll(() => HomePage(), arguments: user.email.toString());
     } else {
       Get.snackbar('Gagal', 'Email sudah terdaftar',
           snackPosition: SnackPosition.BOTTOM);
