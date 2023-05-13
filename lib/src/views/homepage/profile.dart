@@ -83,7 +83,7 @@ class ProfilePage extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(left: 20)),
             Text(
-              'Email',
+              controller.email,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

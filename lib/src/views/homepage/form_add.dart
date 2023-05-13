@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/form_controller.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
+import 'package:griyatilawah_absesnsi/src/models/Absensi.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 
@@ -190,14 +191,14 @@ class AddAbsensi extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      controller.createItem({
-                        'nama': controller.controllerNama.text,
-                        'masjid': controller.selectedValueMasjid.value,
-                        'tanggal': controller.selectedDate.value,
-                        'sholat': controller.selectedValueSholat.value,
-                        'keterangan': '',
-                        'status': 'belum_hadir'
-                      });
+                      controller.createItem(Absensi(
+                          nama: controller.controllerNama.text,
+                          masjid: controller.selectedValueMasjid.value,
+                          date: controller.selectedDate.value,
+                          sholat: controller.selectedValueSholat.value,
+                          keterangan: "",
+                          lokasi: "",
+                          status: "belum_hadir"));
                     },
                     style: ElevatedButton.styleFrom(
                       primary: HexColor('20275D'),

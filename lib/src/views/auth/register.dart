@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/auth_controller.dart';
-import 'package:griyatilawah_absesnsi/src/views/register.dart';
+import 'package:griyatilawah_absesnsi/src/views/auth/login.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   var controller = Get.put(AuthController());
 
   @override
@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Form(
-          key: controller.formKeylogin,
+          key: controller.formKeyRegister,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -22,24 +22,40 @@ class LoginPage extends StatelessWidget {
                 height: 131,
                 width: 336,
               ),
-              const Padding(padding: EdgeInsets.all(50)),
+              const Padding(padding: EdgeInsets.all(10)),
               Text(
-                'Login',
+                'Register',
                 style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: HexColor('20275D')),
               ),
-              Padding(padding: EdgeInsets.all(20)),
+              Padding(padding: EdgeInsets.all(10)),
               Container(
                 margin: EdgeInsets.fromLTRB(38, 0, 29, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
+                      controller: controller.controllerName,
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Name tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Full Name',
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16))),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 16)),
+                    TextFormField(
                       controller: controller.controllerEmail,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value?.isEmpty ?? true) {
                           return 'Email tidak boleh kosong';
                         }
                         return null;
@@ -56,7 +72,7 @@ class LoginPage extends StatelessWidget {
                       () => TextFormField(
                         controller: controller.controllerPassword,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value?.isEmpty ?? true) {
                             return 'Password tidak boleh kosong';
                           }
                           return null;
@@ -105,16 +121,16 @@ class LoginPage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               )),
-                          child: Text('Login',
+                          child: Text('Register',
                               style: GoogleFonts.getFont('Poppins',
                                   textStyle: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600))),
                           onPressed: () {
-                            if (controller.formKeylogin.currentState!
+                            if (controller.formKeyRegister.currentState!
                                 .validate()) {
-                              controller.formKeylogin.currentState!.save();
-                              controller.login();
+                              controller.formKeyRegister.currentState!.save();
+                              controller.register();
                             }
                           }),
                     ),
@@ -124,7 +140,7 @@ class LoginPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Dont have an account?',
+                          Text('Do you have an account?',
                               style: GoogleFonts.getFont('Poppins',
                                   textStyle: TextStyle(
                                       fontSize: 14,
@@ -132,11 +148,11 @@ class LoginPage extends StatelessWidget {
                                       color: Colors.grey))),
                           GestureDetector(
                             onTap: () {
-                              Get.offAll(() => RegisterPage());
+                              Get.offAll(() => LoginPage());
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
-                              child: Text('Sign Up?',
+                              child: Text('Sign In?',
                                   style: GoogleFonts.getFont('Poppins',
                                       textStyle: TextStyle(
                                           fontSize: 14,

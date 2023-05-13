@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:griyatilawah_absesnsi/src/models/User.dart';
-import 'package:griyatilawah_absesnsi/src/views/homepage.dart';
+import 'package:griyatilawah_absesnsi/src/views/homepage/homepage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthController extends GetxController {
@@ -39,7 +39,7 @@ class AuthController extends GetxController {
       if (user.password == controllerPassword.text) {
         Get.snackbar('Berhasil', 'Login berhasil',
             snackPosition: SnackPosition.BOTTOM);
-        Get.offAll(() => HomePage(), arguments: user.name.toString());
+        Get.offAll(() => HomePage(), arguments: user.email.toString());
       } else {
         Get.snackbar('Gagal', 'Password salah',
             snackPosition: SnackPosition.BOTTOM);

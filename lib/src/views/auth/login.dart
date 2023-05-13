@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/auth_controller.dart';
-import 'package:griyatilawah_absesnsi/src/views/login.dart';
+import 'package:griyatilawah_absesnsi/src/views/auth/register.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 
-class RegisterPage extends StatelessWidget {
+class LoginPage extends StatelessWidget {
   var controller = Get.put(AuthController());
 
   @override
@@ -13,7 +13,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Form(
-          key: controller.formKeyRegister,
+          key: controller.formKeylogin,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -22,9 +22,9 @@ class RegisterPage extends StatelessWidget {
                 height: 131,
                 width: 336,
               ),
-              const Padding(padding: EdgeInsets.all(50)),
+              const Padding(padding: EdgeInsets.all(30)),
               Text(
-                'Register',
+                'Login',
                 style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -37,25 +37,9 @@ class RegisterPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      controller: controller.controllerName,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return 'Name tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Full Name',
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16))),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 16)),
-                    TextFormField(
                       controller: controller.controllerEmail,
                       validator: (value) {
-                        if (value?.isEmpty ?? true) {
+                        if (value == null || value.isEmpty) {
                           return 'Email tidak boleh kosong';
                         }
                         return null;
@@ -72,7 +56,7 @@ class RegisterPage extends StatelessWidget {
                       () => TextFormField(
                         controller: controller.controllerPassword,
                         validator: (value) {
-                          if (value?.isEmpty ?? true) {
+                          if (value == null || value.isEmpty) {
                             return 'Password tidak boleh kosong';
                           }
                           return null;
@@ -121,16 +105,16 @@ class RegisterPage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               )),
-                          child: Text('Register',
+                          child: Text('Login',
                               style: GoogleFonts.getFont('Poppins',
                                   textStyle: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600))),
                           onPressed: () {
-                            if (controller.formKeyRegister.currentState!
+                            if (controller.formKeylogin.currentState!
                                 .validate()) {
-                              controller.formKeyRegister.currentState!.save();
-                              controller.register();
+                              controller.formKeylogin.currentState!.save();
+                              controller.login();
                             }
                           }),
                     ),
@@ -140,7 +124,7 @@ class RegisterPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Do you have an account?',
+                          Text('Dont have an account?',
                               style: GoogleFonts.getFont('Poppins',
                                   textStyle: TextStyle(
                                       fontSize: 14,
@@ -148,11 +132,11 @@ class RegisterPage extends StatelessWidget {
                                       color: Colors.grey))),
                           GestureDetector(
                             onTap: () {
-                              Get.offAll(() => LoginPage());
+                              Get.offAll(() => RegisterPage());
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
-                              child: Text('Sign In?',
+                              child: Text('Sign Up?',
                                   style: GoogleFonts.getFont('Poppins',
                                       textStyle: TextStyle(
                                           fontSize: 14,

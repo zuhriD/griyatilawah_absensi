@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:griyatilawah_absesnsi/src/models/Absensi.dart';
-import 'package:griyatilawah_absesnsi/src/views/homepage.dart';
-import 'package:griyatilawah_absesnsi/src/views/listview_absensi.dart';
+import 'package:griyatilawah_absesnsi/src/views/homepage/homepage.dart';
+import 'package:griyatilawah_absesnsi/src/views/homepage/listview_absensi.dart';
+import 'package:griyatilawah_absesnsi/src/views/homepage/osm.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class FormController extends GetxController {
@@ -14,10 +15,15 @@ class FormController extends GetxController {
   final controllerSholat = TextEditingController();
   final controllerKeterangan = TextEditingController();
 
+  var valueLocation = ''.obs;
+
+  final homeController = Get.find<HomeController>();
+
+  late Absensi absensi;
+
   //form box
   final formBox = Hive.box('form');
   final authBox = Hive.box('auth');
-  var controllerHome = Get.put(HomeController());
 
   // Fungsi untuk membuka box
   void openBox() async {
@@ -92,131 +98,140 @@ class FormController extends GetxController {
   var nama = '';
 
   void refreshItems() {
-    final data = formBox.keys.map((key) {
-      final item = formBox.get(key);
-      print(authBox.get('kkkname'));
-      return {
-        "key": key,
-        "nama": item['nama'],
-        "masjid": item['masjid'],
-        "tanggal": item['tanggal'],
-        "sholat": item['sholat'],
-        "keterangan": item['keterangan'],
-        "status": item['status'],
-      };
-    }).toList();
+    // final currentUser = authBox.get(homeController.email + 'name');
+    // final data = formBox.values.map((key) {
+    //   final item = formBox.get(key);
+    //   print(key);
+    //   return {
+    //     "key": key,
+    //     "nama": item['nama'],
+    //     "masjid": item['masjid'],
+    //     "tanggal": item['tanggal'],
+    //     "sholat": item['sholat'],
+    //     "keterangan": item['keterangan'],
+    //     "lokasi": item['lokasi'],
+    //     "status": item['status'],
+    //   };
+    // }).toList();
 
-    items = data.reversed.toList();
+    // items = data.reversed.toList();
   }
 
   //create item
-  Future<void> createItem(Map<String, dynamic> newItem) async {
+  Future<void> createItem(Absensi newItem) async {
     await formBox.add(newItem);
-    refreshItems();
     Get.snackbar(
       'Berhasil',
       'Data berhasil disimpan',
       snackPosition: SnackPosition.BOTTOM,
       snackStyle: SnackStyle.FLOATING,
     );
-    Get.offAll(() => HomePage(), arguments: newItem['nama']);
+    Get.offAll(() => HomePage(), arguments: homeController.email);
   }
 
   //update item
-  Future<void> updateItem(int itemKey, Map<String, dynamic> item) async {
+  Future<void> updateItem(int itemKey, Absensi item) async {
     await formBox.put(itemKey, item);
-    refreshItems();
     Get.snackbar(
       'Berhasil',
       'Data berhasil diubah',
       snackPosition: SnackPosition.BOTTOM,
       snackStyle: SnackStyle.FLOATING,
     );
-    Get.offAll(() => HomePage());
+    Get.offAll(() => HomePage(), arguments: homeController.email);
   }
 
-  void showform(
-      BuildContext ctx, int? itemKey, Map<String, dynamic> item) async {
-    if (itemKey != null) {
-      final existingItem =
-          items.firstWhere((element) => element['key'] == itemKey);
-      controllerKeterangan.text = existingItem['keterangan'];
-    }
+  void showform(BuildContext ctx, int? itemKey, Absensi item) async {
     showModalBottomSheet(
         context: ctx,
         elevation: 5,
         isScrollControlled: true,
         builder: (_) => Container(
-              padding: EdgeInsets.all(20),
+              padding: MediaQuery.of(ctx).viewInsets,
               child: Form(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFormField(
-                      controller: controllerKeterangan,
-                      decoration: InputDecoration(
-                        hintText: 'Keterangan',
-                        labelText: 'Keterangan',
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      height: 500,
+                      child: OSMPage(),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: TextFormField(
+                        controller: controllerKeterangan,
+                        decoration: InputDecoration(
+                          hintText: 'Keterangan',
+                          labelText: 'Keterangan',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (itemKey != null) {
-                                updateItem(itemKey, {
-                                  "nama": item['nama'],
-                                  "masjid": item['masjid'],
-                                  "tanggal": item['tanggal'],
-                                  "sholat": item['sholat'],
-                                  "keterangan":
-                                      controllerKeterangan.text.trim(),
-                                  "status": 'Hadir',
-                                });
-                              }
-                            },
-                            child: Text(
-                              'Hadir',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600, fontSize: 16),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                            )),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (itemKey != null) {
-                                updateItem(itemKey, {
-                                  "nama": item['nama'],
-                                  "masjid": item['masjid'],
-                                  "tanggal": item['tanggal'],
-                                  "sholat": item['sholat'],
-                                  "keterangan":
-                                      controllerKeterangan.text.trim(),
-                                  "status": 'izin',
-                                });
-                              }
-                            },
-                            child: Text(
-                              'Izin',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600, fontSize: 16),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                            )),
-                      ],
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                if (itemKey != null) {
+                                  updateItem(
+                                      itemKey,
+                                      Absensi(
+                                          nama: homeController.name,
+                                          masjid: selectedValueMasjid.value,
+                                          date: selectedDate.value,
+                                          sholat: selectedValueSholat.value,
+                                          keterangan:
+                                              controllerKeterangan.text.trim(),
+                                          lokasi: valueLocation.value,
+                                          status: "Hadir"));
+                                }
+                              },
+                              child: Text(
+                                'Hadir',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                if (itemKey != null) {
+                                  updateItem(
+                                      itemKey,
+                                      Absensi(
+                                          nama: homeController.name,
+                                          masjid: selectedValueMasjid.value,
+                                          date: selectedDate.value,
+                                          sholat: selectedValueSholat.value,
+                                          keterangan:
+                                              controllerKeterangan.text.trim(),
+                                          lokasi: "",
+                                          status: "izin"));
+                                }
+                              },
+                              child: Text(
+                                'Izin',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              )),
+                        ],
+                      ),
                     )
                   ],
                 ),
