@@ -35,7 +35,6 @@ class FormController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     openBox();
-    refreshItems();
   }
 
   var selectedDate = DateTime.now().obs;
@@ -96,26 +95,6 @@ class FormController extends GetxController {
 
   List<Map<String, dynamic>> items = [];
   var nama = '';
-
-  void refreshItems() {
-    // final currentUser = authBox.get(homeController.email + 'name');
-    // final data = formBox.values.map((key) {
-    //   final item = formBox.get(key);
-    //   print(key);
-    //   return {
-    //     "key": key,
-    //     "nama": item['nama'],
-    //     "masjid": item['masjid'],
-    //     "tanggal": item['tanggal'],
-    //     "sholat": item['sholat'],
-    //     "keterangan": item['keterangan'],
-    //     "lokasi": item['lokasi'],
-    //     "status": item['status'],
-    //   };
-    // }).toList();
-
-    // items = data.reversed.toList();
-  }
 
   //create item
   Future<void> createItem(Absensi newItem) async {

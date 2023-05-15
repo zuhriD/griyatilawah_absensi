@@ -16,9 +16,9 @@ void registerNotification() {
     callBackDispatcher,
     isInDebugMode: true,
   );
-  Workmanager().registerOneOffTask(
+  Workmanager().registerPeriodicTask(
     "1",
     "notificationTask",
-    initialDelay: const Duration(seconds: 5),
+    frequency: Duration(minutes: 15),
   );
 }

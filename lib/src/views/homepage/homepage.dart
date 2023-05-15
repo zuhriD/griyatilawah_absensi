@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
                         top: 200,
                         left: 24,
                         child: Text(
-                          controller.name.toString(),
+                          "Ustadz ${controller.name}",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
