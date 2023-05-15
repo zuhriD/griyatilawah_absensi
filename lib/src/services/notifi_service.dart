@@ -28,13 +28,15 @@ class NotificationService {
             channelDescription: 'your channel description',
             importance: Importance.max,
             priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound('coba'),
+            playSound: true,
             showWhen: false),
         iOS: DarwinNotificationDetails());
   }
 
   Future showNotification(
-      {int id = 1, String? title, String? body, String? payload}) async {
-    return flutterLocalNotificationsPlugin
-        .show(id, title, body, await notificationDetails(), payload: 'item x');
+      {int id = 0, String? title, String? body, String? payload}) async {
+    return flutterLocalNotificationsPlugin.show(
+        id, title, body, await notificationDetails());
   }
 }

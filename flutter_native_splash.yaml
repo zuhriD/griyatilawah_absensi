@@ -1,0 +1,5 @@
+# flutter_native_splash.yaml
+# Replace the placeholder image with your own splash screen image path
+flutter_native_splash:
+  image: assets/logo.png
+  color:  "#FFFFFF"
