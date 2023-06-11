@@ -50,6 +50,7 @@ dependencies:
   latlong2: ^0.8.1
   permission_handler: ^10.2.0
   flutter_native_splash: ^2.2.19
+  http: ^0.13.6
   
   
 

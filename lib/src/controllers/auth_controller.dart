@@ -3,71 +3,51 @@ import 'package:get/get.dart';
 import 'package:griyatilawah_absesnsi/src/models/User.dart';
 import 'package:griyatilawah_absesnsi/src/views/homepage/homepage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:griyatilawah_absesnsi/src/services/api_services.dart';
 
 class AuthController extends GetxController {
   // Membuat variabel untuk password visibility
   RxBool passwordVisibility = false.obs;
-
-  // Membuat variabel untuk user
-  User user = User(name: '', email: '', password: '');
 
   // Membuat variable form key
   final formKeylogin = GlobalKey<FormState>();
   final formKeyRegister = GlobalKey<FormState>();
 
   // Membuat controller
-  final controllerEmail = TextEditingController();
+  final controllerUsername = TextEditingController();
   final controllerPassword = TextEditingController();
   final controllerName = TextEditingController();
 
-  // Membuat box
-  final authBox = Hive.box('auth');
+  final ApiService _apiService = ApiService();
 
-  // Fungsi untuk membuka box
-  void openBox() async {
-    await Hive.openBox('auth');
-  }
+  RxString email = ''.obs;
+  RxString password = ''.obs;
 
-  // Fungsi untuk login
+  // buat variable global untuk menyimpan token
+  RxString token1 = ''.obs;
+
   Future<void> login() async {
-    if (authBox.containsKey('${controllerEmail.text}email')) {
-      //how to get data from hive
-      user = User(
-          name: authBox.get('${controllerEmail.text}name'),
-          email: authBox.get('${controllerEmail.text}email'),
-          password: authBox.get('${controllerEmail.text}password'));
-      if (user.password == controllerPassword.text) {
-        Get.snackbar('Berhasil', 'Login berhasil',
-            snackPosition: SnackPosition.BOTTOM);
-        Get.offAll(() => HomePage(), arguments: user.email.toString());
-      } else {
-        Get.snackbar('Gagal', 'Password salah',
-            snackPosition: SnackPosition.BOTTOM);
-      }
-    } else {
-      Get.snackbar('Gagal', 'Email tidak terdaftar',
-          snackPosition: SnackPosition.BOTTOM);
-    }
-  }
+    try {
+      final response = await _apiService.login(
+          controllerUsername.text, controllerPassword.text);
 
-  // Fungsi untuk register
-  Future<void> register() async {
-    if (!authBox.containsKey(controllerEmail.text) &&
-        !authBox.containsKey(controllerPassword.text)) {
-      //how to save data to hive
-      user = User(
-          name: controllerName.text,
-          email: controllerEmail.text,
-          password: controllerPassword.text);
-      authBox.put('${user.email}email', user.email);
-      authBox.put('${user.email}name', user.name);
-      authBox.put('${user.email}password', user.password);
-      Get.snackbar('Berhasil', 'Akun berhasil dibuat',
-          snackPosition: SnackPosition.BOTTOM);
-      Get.offAll(() => HomePage(), arguments: user.email.toString());
-    } else {
-      Get.snackbar('Gagal', 'Email sudah terdaftar',
-          snackPosition: SnackPosition.BOTTOM);
+      // Response handling
+      if (response.containsKey('status') && response['status'] == true) {
+        final token = response['token'];
+        token1.value = token;
+        final userData = response['data'];
+        // Simpan token dan data pengguna di sini
+        // Redirect ke halaman setelah login berhasil
+        // redirect ke halaman home dan kirim data pengguna menggunakan argumen
+        Get.offAll(() => HomePage(), arguments: userData);
+      } else {
+        final message = response['message'];
+        // Tampilkan pesan kesalahan jika login gagal
+        Get.snackbar('Login Gagal', message);
+      }
+    } catch (e) {
+      // Tangani kesalahan saat melakukan permintaan HTTP
+      Get.snackbar('Error', 'Terjadi kesalahan saat melakukan login.');
     }
   }
 
@@ -75,6 +55,5 @@ class AuthController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    openBox();
   }
 }

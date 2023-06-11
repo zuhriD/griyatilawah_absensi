@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/auth_controller.dart';
-import 'package:griyatilawah_absesnsi/src/views/auth/register.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 
@@ -37,15 +36,15 @@ class LoginPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      controller: controller.controllerEmail,
+                      controller: controller.controllerUsername,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
+                          return 'Username tidak boleh kosong';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        hintText: 'Email',
+                        hintText: 'Username',
                         border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16))),
@@ -118,35 +117,6 @@ class LoginPage extends StatelessWidget {
                             }
                           }),
                     ),
-                    Container(
-                      height: 21,
-                      width: 347,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Dont have an account?',
-                              style: GoogleFonts.getFont('Poppins',
-                                  textStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey))),
-                          GestureDetector(
-                            onTap: () {
-                              Get.offAll(() => RegisterPage());
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Text('Sign Up?',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: HexColor("92CB69")))),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               )
