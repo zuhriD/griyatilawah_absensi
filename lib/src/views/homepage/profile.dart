@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(left: 20)),
             Text(
-              controller.name,
+              controller.userdata['name'],
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -82,14 +82,14 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             Padding(padding: EdgeInsets.only(left: 20)),
-            Text(
-              controller.email,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: HexColor('20275D'),
-              ),
-            ),
+            // Text(
+            //   controller.email,
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     fontWeight: FontWeight.bold,
+            //     color: HexColor('20275D'),
+            //   ),
+            // ),
           ],
         ),
       ]),

@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:griyatilawah_absesnsi/src/controllers/auth_controller.dart';
 import 'package:griyatilawah_absesnsi/src/views/auth/login.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
+import 'package:griyatilawah_absesnsi/src/models/Jadwal.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeController extends GetxController {
-  final email = Get.arguments;
+  final userdata = Get.arguments;
+
+  var authcontroller = Get.find<AuthController>();
+
+  var jadwalList = <Jadwal>[].obs;
 
   // final Absensi data = Get.arguments;
   var formBox;
   var authBox = Hive.box('auth');
-  var name = "";
 
   List<dynamic> listJadwal = Hive.box('form').values.toList();
   List<dynamic> listKey = Hive.box('form').keys.toList();
@@ -42,10 +49,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     pageController = PageController(initialPage: currentIndex.value);
-    // var nama = authBox.get(name + 'nama');
-    name = authBox.get(email + 'name');
-    print(name);
-    openBox();
+    print(userdata['id']);
+    fetchJadwalList();
   }
 
   void changeTab(int index) {
@@ -58,7 +63,9 @@ class HomeController extends GetxController {
   }
 
   //function tanggal
-  String tanggal(DateTime date) {
+  String tanggal(String date1) {
+    // convert string to date
+    DateTime date = DateTime.parse(date1);
     if (date.day == DateTime.now().day &&
         date.month == DateTime.now().month &&
         date.year == DateTime.now().year) {
@@ -69,6 +76,28 @@ class HomeController extends GetxController {
       return 'Besok';
     } else {
       return DateFormat('dd MMMM yyyy').format(date);
+    }
+  }
+
+  Future<void> fetchJadwalList() async {
+    try {
+      final token = authcontroller.token1.value;
+      final id = userdata['id'];
+      final response = await http.get(
+        Uri.parse('http://192.168.1.7:8001/api/jadwal/$id'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        jadwalList.value =
+            List<Jadwal>.from(jsonData['data'].map((x) => Jadwal.fromJson(x)));
+      } else {
+        // Handle error cases
+        print('error');
+      }
+    } catch (e) {
+      // Handle exception
+      print(e);
     }
   }
 }

@@ -15,7 +15,7 @@ class AddAbsensi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.controllerNama.text = homeController.name;
+    controller.controllerNama.text = homeController.userdata['name'];
     return Scaffold(
         //make me form add absensi
         body: Column(

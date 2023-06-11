@@ -45,19 +45,15 @@ class HistoryPage extends StatelessWidget {
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 20)),
-          formController.formBox.length < 1
-              ? Center(child: Text('Tidak ada Riwayat Absensi'))
+          Obx(() => controller.jadwalList.isEmpty
+              ? Center(child: CircularProgressIndicator())
               : Expanded(
                   child: ListView.builder(
                     itemCount: formController.formBox.length,
                     itemBuilder: (context, index) {
-                      // final currentItem = formController.items[index];
-                      Absensi absensi = formController.formBox.getAt(index);
-                      return absensi == null ||
-                              absensi.status == "belum_hadir" ||
-                              absensi.nama != controller.name
-                          ? Container()
-                          : Container(
+                      final jadwal = controller.jadwalList[index];
+                      return jadwal.status == "sudah_absen"
+                          ? Container(
                               margin: EdgeInsets.fromLTRB(24, 5, 24, 8),
                               child: Container(
                                   height: 100,
@@ -70,7 +66,7 @@ class HistoryPage extends StatelessWidget {
                                   ),
                                   child: Stack(
                                     children: [
-                                      absensi.status == "belum_hadir"
+                                      jadwal.status == "belum_absen"
                                           ? Positioned(
                                               child: Container(
                                               width: 23,
@@ -101,7 +97,7 @@ class HistoryPage extends StatelessWidget {
                                         top: 10,
                                         left: 35,
                                         child: Text(
-                                          absensi.nama,
+                                          jadwal.namaImam,
                                           style: GoogleFonts.montserrat(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
@@ -112,7 +108,7 @@ class HistoryPage extends StatelessWidget {
                                         top: 40,
                                         left: 35,
                                         child: Text(
-                                          absensi.masjid,
+                                          jadwal.namaMasjid,
                                           style: GoogleFonts.montserrat(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w400,
@@ -125,14 +121,14 @@ class HistoryPage extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             Text(
-                                              controller.tanggal(absensi.date),
+                                              controller.tanggal(jadwal.date),
                                               style: GoogleFonts.montserrat(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.white),
                                             ),
                                             Text(
-                                              " ${absensi.sholat}",
+                                              " ${jadwal.namaAktivitas}",
                                               style: GoogleFonts.montserrat(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
@@ -142,25 +138,25 @@ class HistoryPage extends StatelessWidget {
                                         ),
                                       ),
                                       //make button for check in
-                                      absensi.status == 'belum_hadir'
+                                      jadwal.status == 'belum_absen'
                                           ? Positioned(
                                               top: 30,
                                               right: 20,
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  formController.showform(
-                                                      context,
-                                                      index,
-                                                      Absensi(
-                                                          nama: absensi.nama,
-                                                          masjid:
-                                                              absensi.masjid,
-                                                          date: absensi.date,
-                                                          sholat:
-                                                              absensi.sholat,
-                                                          keterangan: "",
-                                                          lokasi: "",
-                                                          status: "Hadir"));
+                                                  // formController.showform(
+                                                  //     context,
+                                                  //     index,
+                                                  //     Absensi(
+                                                  //         nama: absensi.nama,
+                                                  //         masjid:
+                                                  //             absensi.masjid,
+                                                  //         date: absensi.date,
+                                                  //         sholat:
+                                                  //             absensi.sholat,
+                                                  //         keterangan: "",
+                                                  //         lokasi: "",
+                                                  //         status: "Hadir"));
                                                 },
                                                 child: Text('Absen'),
                                                 style: ElevatedButton.styleFrom(
@@ -173,61 +169,37 @@ class HistoryPage extends StatelessWidget {
                                                 ),
                                               ),
                                             )
-                                          : absensi.status == 'izin'
-                                              ? Positioned(
-                                                  top: 40,
-                                                  right: 20,
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        'Izin',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .white),
-                                                      ),
-                                                      Icon(
-                                                        Icons.check,
-                                                        color:
-                                                            HexColor('6DB351'),
-                                                      ),
-                                                    ],
+                                          : Positioned(
+                                              top: 40,
+                                              right: 20,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Sudah Absen',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.white),
                                                   ),
-                                                )
-                                              : Positioned(
-                                                  top: 40,
-                                                  right: 20,
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        'Sudah Absen',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .white),
-                                                      ),
-                                                      Icon(
-                                                        Icons.check,
-                                                        color:
-                                                            HexColor('6DB351'),
-                                                      ),
-                                                    ],
+                                                  Icon(
+                                                    Icons.check,
+                                                    color: HexColor('6DB351'),
                                                   ),
-                                                ),
+                                                ],
+                                              ),
+                                            ),
                                     ],
                                   )),
+                            )
+                          : Container(
+                              child: Text('Tidak Ada Riwayat'),
                             );
                     },
                   ),
-                )
+                ))
         ],
       ),
     );

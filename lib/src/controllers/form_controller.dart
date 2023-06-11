@@ -105,7 +105,7 @@ class FormController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       snackStyle: SnackStyle.FLOATING,
     );
-    Get.offAll(() => HomePage(), arguments: homeController.email);
+    // Get.offAll(() => HomePage(), arguments: homeController.email);
   }
 
   //update item
@@ -117,7 +117,7 @@ class FormController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       snackStyle: SnackStyle.FLOATING,
     );
-    Get.offAll(() => HomePage(), arguments: homeController.email);
+    // Get.offAll(() => HomePage(), arguments: homeController.email);
   }
 
   void showform(BuildContext ctx, int? itemKey, Absensi item) async {
@@ -163,7 +163,7 @@ class FormController extends GetxController {
                                   updateItem(
                                       itemKey,
                                       Absensi(
-                                          nama: homeController.name,
+                                          nama: homeController.userdata.name,
                                           masjid: selectedValueMasjid.value,
                                           date: selectedDate.value,
                                           sholat: selectedValueSholat.value,
@@ -189,7 +189,7 @@ class FormController extends GetxController {
                                   updateItem(
                                       itemKey,
                                       Absensi(
-                                          nama: homeController.name,
+                                          nama: homeController.userdata.name,
                                           masjid: selectedValueMasjid.value,
                                           date: selectedDate.value,
                                           sholat: selectedValueSholat.value,

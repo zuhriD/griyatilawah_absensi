@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
                         top: 200,
                         left: 24,
                         child: Text(
-                          "Ustadz ${controller.name}",
+                          "Ustadz ${controller.userdata['name']}",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -103,7 +103,6 @@ class HomePage extends StatelessWidget {
               Expanded(child: listview_absensi()),
             ],
           ),
-          AddAbsensi(),
           HistoryPage(),
           ProfilePage(),
         ],
@@ -120,12 +119,6 @@ class HomePage extends StatelessWidget {
             BottomNavyBarItem(
                 icon: Icon(Icons.home),
                 title: Text('Home'),
-                activeColor: HexColor('20275D'),
-                inactiveColor: Colors.black,
-                textAlign: TextAlign.center),
-            BottomNavyBarItem(
-                icon: Icon(Icons.add),
-                title: Text('Add'),
                 activeColor: HexColor('20275D'),
                 inactiveColor: Colors.black,
                 textAlign: TextAlign.center),
