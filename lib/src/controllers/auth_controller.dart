@@ -47,7 +47,7 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       // Tangani kesalahan saat melakukan permintaan HTTP
-      Get.snackbar('Error', 'Terjadi kesalahan saat melakukan login.');
+      Get.snackbar('Error', e.toString());
     }
   }
 

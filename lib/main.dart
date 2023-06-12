@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:griyatilawah_absesnsi/src/models/Absensi.dart';
+import 'package:griyatilawah_absesnsi/src/services/api_services.dart';
 import 'package:griyatilawah_absesnsi/src/services/notifi_service.dart';
 import 'package:griyatilawah_absesnsi/src/services/workmanager_services.dart';
 import 'package:griyatilawah_absesnsi/src/views/auth/login.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+// import timezone
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   registerNotification();
-  FlutterNativeSplash(); //dsd
+  tz.initializeTimeZones();
+  // periksa apakah sudah login atau belum
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+  final username = prefs.getString('username');
+  final password = prefs.getString('password');
+
+  FlutterNativeSplash(); //
+  if (token != null && username != null) {
+    print('sudah login');
+  } else {
+    print('belum login');
+  }
   runApp(const MyApp());
 }
 

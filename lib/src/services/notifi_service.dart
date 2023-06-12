@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -40,63 +43,16 @@ class NotificationService {
         id, title, body, await notificationDetails());
   }
 
-  void showPrayerTimeNotification() async {
-    // Get the current time
-    DateTime currentTime = DateTime.now();
-
-    // Set the prayer time for Subuh (example: 04:00 AM)
-    DateTime subuhTime = DateTime(
-      currentTime.year,
-      currentTime.month,
-      currentTime.day,
-      4, // Hour
-      0, // Minute
-    );
-
-    // set the prayer time for maghrib (example: 18:00 PM)
-    DateTime maghribTime = DateTime(
-      currentTime.year,
-      currentTime.month,
-      currentTime.day,
-      17, // Hour
-      30, // Minute
-    );
-
-    // set the prayer time for isya (example: 18:00 PM)
-    DateTime isyaTime = DateTime(
-      currentTime.year,
-      currentTime.month,
-      currentTime.day,
-      18, // Hour
-      30, // Minute
-    );
-
-    // Calculate the duration until Subuh prayer time
-    Duration durationUntilSubuh = subuhTime.difference(currentTime);
-    // Calculate the duration until Maghrib prayer time
-    Duration durationUntilMaghrib = maghribTime.difference(currentTime);
-    // Calculate the duration until Isya prayer time
-    Duration durationUntilIsya = isyaTime.difference(currentTime);
-
-    // Check if it's time for Subuh prayer
-    if (durationUntilSubuh.inMinutes <= 0) {
-      await flutterLocalNotificationsPlugin.show(
-          0, // Notification ID
-          'Prayer Time',
-          'It\'s time for Subuh prayer!', // Notification message
-          await notificationDetails());
-    } else if (durationUntilMaghrib.inMinutes <= 0) {
-      await flutterLocalNotificationsPlugin.show(
-          0, // Notification ID
-          'Prayer Time',
-          'It\'s time for Maghrib prayer!', // Notification message
-          await notificationDetails());
-    } else if (durationUntilIsya.inMinutes <= 0) {
-      await flutterLocalNotificationsPlugin.show(
-          0, // Notification ID
-          'Prayer Time',
-          'It\'s time for Isya prayer!', // Notification message
-          await notificationDetails());
-    }
+  void showPrayerTimeNotification(
+      {int id = 0,
+      String? title,
+      String? body,
+      String? payload,
+      required DateTime schedule}) async {
+    return flutterLocalNotificationsPlugin.zonedSchedule(id, title, body,
+        tz.TZDateTime.from(schedule, tz.local), await notificationDetails(),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
   }
 }

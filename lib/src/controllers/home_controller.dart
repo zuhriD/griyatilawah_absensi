@@ -9,6 +9,8 @@ import 'package:griyatilawah_absesnsi/src/models/Jadwal.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HomeController extends GetxController {
   final userdata = Get.arguments;
 
@@ -29,7 +31,11 @@ class HomeController extends GetxController {
   }
 
   //make function for logout
-  void logout() {
+  void logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('username');
+    await prefs.remove('password');
     Get.offAll(() => LoginPage());
   }
 

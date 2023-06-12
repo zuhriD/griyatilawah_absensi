@@ -3,8 +3,11 @@ import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point')
 void callBackDispatcher() {
+//  make variable to get time 5 minute later
+  DateTime time = DateTime.now().add(Duration(minutes: 2));
   Workmanager().executeTask((task, inputData) {
-    NotificationService().showPrayerTimeNotification();
+    NotificationService().showNotification(
+        title: 'Absensi Griya Tilawah', body: 'Waktu Absensi');
     return Future.value(true);
   });
 }
@@ -17,6 +20,6 @@ void registerNotification() {
   Workmanager().registerPeriodicTask(
     "1",
     "notificationTask",
-    frequency: Duration(days: 1),
+    frequency: const Duration(days: 1),
   );
 }
