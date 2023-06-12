@@ -150,43 +150,13 @@ class HistoryPage extends StatelessWidget {
                                         ),
                                       ),
                                       //make button for check in
-                                      jadwal.status == 'belum_absen'
-                                          ? Positioned(
-                                              top: 30,
-                                              right: 20,
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  // formController.showform(
-                                                  //     context,
-                                                  //     index,
-                                                  //     Absensi(
-                                                  //         nama: absensi.nama,
-                                                  //         masjid:
-                                                  //             absensi.masjid,
-                                                  //         date: absensi.date,
-                                                  //         sholat:
-                                                  //             absensi.sholat,
-                                                  //         keterangan: "",
-                                                  //         lokasi: "",
-                                                  //         status: "Hadir"));
-                                                },
-                                                child: Text('Absen'),
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: HexColor('6DB351'),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : Positioned(
-                                              top: 40,
-                                              right: 20,
-                                              child: Row(
-                                                children: [
-                                                  Text(
+                                      Positioned(
+                                        top: 40,
+                                        right: 20,
+                                        child: Row(
+                                          children: [
+                                            jadwal.status == 'sudah_absen'
+                                                ? Text(
                                                     'Sudah Absen',
                                                     style:
                                                         GoogleFonts.montserrat(
@@ -195,14 +165,24 @@ class HistoryPage extends StatelessWidget {
                                                                 FontWeight.w600,
                                                             color:
                                                                 Colors.white),
+                                                  )
+                                                : Text(
+                                                    'Izin',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.white),
                                                   ),
-                                                  Icon(
-                                                    Icons.check,
-                                                    color: HexColor('6DB351'),
-                                                  ),
-                                                ],
-                                              ),
+                                            Icon(
+                                              Icons.check,
+                                              color: HexColor('6DB351'),
                                             ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   )),
                             )

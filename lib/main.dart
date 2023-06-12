@@ -11,10 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   registerNotification();
-  Hive.registerAdapter(AbsensiAdapter());
-  await Hive.initFlutter();
-  await Hive.openBox('auth');
-  await Hive.openBox('form');
   FlutterNativeSplash(); //dsd
   runApp(const MyApp());
 }

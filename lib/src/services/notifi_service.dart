@@ -53,8 +53,30 @@ class NotificationService {
       0, // Minute
     );
 
+    // set the prayer time for maghrib (example: 18:00 PM)
+    DateTime maghribTime = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      17, // Hour
+      30, // Minute
+    );
+
+    // set the prayer time for isya (example: 18:00 PM)
+    DateTime isyaTime = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      18, // Hour
+      30, // Minute
+    );
+
     // Calculate the duration until Subuh prayer time
     Duration durationUntilSubuh = subuhTime.difference(currentTime);
+    // Calculate the duration until Maghrib prayer time
+    Duration durationUntilMaghrib = maghribTime.difference(currentTime);
+    // Calculate the duration until Isya prayer time
+    Duration durationUntilIsya = isyaTime.difference(currentTime);
 
     // Check if it's time for Subuh prayer
     if (durationUntilSubuh.inMinutes <= 0) {
@@ -62,6 +84,18 @@ class NotificationService {
           0, // Notification ID
           'Prayer Time',
           'It\'s time for Subuh prayer!', // Notification message
+          await notificationDetails());
+    } else if (durationUntilMaghrib.inMinutes <= 0) {
+      await flutterLocalNotificationsPlugin.show(
+          0, // Notification ID
+          'Prayer Time',
+          'It\'s time for Maghrib prayer!', // Notification message
+          await notificationDetails());
+    } else if (durationUntilIsya.inMinutes <= 0) {
+      await flutterLocalNotificationsPlugin.show(
+          0, // Notification ID
+          'Prayer Time',
+          'It\'s time for Isya prayer!', // Notification message
           await notificationDetails());
     }
   }

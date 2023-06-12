@@ -1,24 +1,23 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:griyatilawah_absesnsi/src/controllers/auth_controller.dart';
 import 'package:griyatilawah_absesnsi/src/controllers/home_controller.dart';
 import 'package:griyatilawah_absesnsi/src/views/homepage/osm.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:map_launcher/map_launcher.dart';
-import 'package:camera/camera.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FormController extends GetxController {
-  final controllerNama = TextEditingController();
-  final controllerMasjid = TextEditingController();
-  final controllerDate = TextEditingController();
-  final controllerSholat = TextEditingController();
   final controllerKeterangan = TextEditingController();
 
   var valueLocation = ''.obs;
 
   final homeController = Get.find<HomeController>();
+  final authcontroller = Get.find<AuthController>();
 
   var namaAktivitas = ''.obs;
 
@@ -93,9 +92,7 @@ class FormController extends GetxController {
   }
 
   // make function to post data to api
-  void showAbsensi(BuildContext ctx, int id) async {
-    TextEditingController keteranganController = TextEditingController();
-
+  void showAbsensi(BuildContext ctx, int idImam, int idJadwal) async {
     // ignore: use_build_context_synchronously
     showModalBottomSheet(
       context: ctx,
@@ -109,6 +106,7 @@ class FormController extends GetxController {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Padding(padding: EdgeInsets.only(top: 10)),
                   // make controller to show image picker
                   Obx(() => image.value != null
                       ? Image.file(
@@ -120,7 +118,7 @@ class FormController extends GetxController {
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
-                      controller: keteranganController,
+                      controller: controllerKeterangan,
                       decoration: InputDecoration(
                         labelText: 'Keterangan',
                         border: OutlineInputBorder(),
@@ -139,12 +137,15 @@ class FormController extends GetxController {
                       ElevatedButton(
                         onPressed: () {
                           // Tombol Hadir diklik
+                          editStatusJadwalByImam(
+                              ctx, 'sudah_absen', idImam, idJadwal);
                         },
                         child: Text('Hadir'),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           // Tombol Izin diklik
+                          editStatusJadwalByImam(ctx, 'izin', idImam, idJadwal);
                         },
                         child: Text('Izin'),
                       ),
@@ -157,5 +158,52 @@ class FormController extends GetxController {
         },
       ),
     );
+  }
+
+  // make function to post data to api
+  Future<void> editStatusJadwalByImam(
+      BuildContext ctx, String status, int idImam, int idJadwal) async {
+    final String url =
+        'http://192.168.1.7:8001/api/jadwal/$idImam/$idJadwal'; // Replace with your API endpoint
+    final String token =
+        authcontroller.token1.value; // Replace with your bearer token
+
+    Map<String, dynamic> data = {
+      'keterangan': controllerKeterangan.text,
+      'bukti': image.value!.path,
+      'status': status,
+    };
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Request successful
+        var responseData = jsonDecode(response.body);
+        // Handle the response data here
+        print(responseData);
+        Get.snackbar(
+          'Sukses',
+          'Berhasil Absen',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        Navigator.of(ctx).pop();
+        homeController.fetchJadwalList();
+      } else {
+        // Request failed
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Exception: $error');
+    }
   }
 }

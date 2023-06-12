@@ -17,6 +17,6 @@ void registerNotification() {
   Workmanager().registerPeriodicTask(
     "1",
     "notificationTask",
-    frequency: Duration(minutes: 15),
+    frequency: Duration(days: 1),
   );
 }

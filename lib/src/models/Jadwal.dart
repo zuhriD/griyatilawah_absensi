@@ -1,5 +1,6 @@
 class Jadwal {
   int id;
+  int imamId;
   String namaImam;
   String namaMasjid;
   String latitudeMasjid;
@@ -14,6 +15,7 @@ class Jadwal {
 
   Jadwal({
     required this.id,
+    required this.imamId,
     required this.namaImam,
     required this.namaMasjid,
     required this.latitudeMasjid,
@@ -30,6 +32,7 @@ class Jadwal {
   factory Jadwal.fromJson(Map<String, dynamic> json) {
     return Jadwal(
       id: json['id'],
+      imamId: json['imam_id'],
       namaImam: json['nama_imam'],
       namaMasjid: json['nama_masjid'],
       latitudeMasjid: json['latitude_masjid'],

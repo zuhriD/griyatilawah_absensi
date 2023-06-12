@@ -17,11 +17,6 @@ class HomeController extends GetxController {
   var jadwalList = <Jadwal>[].obs;
 
   // final Absensi data = Get.arguments;
-  var formBox;
-  var authBox = Hive.box('auth');
-
-  List<dynamic> listJadwal = Hive.box('form').values.toList();
-  List<dynamic> listKey = Hive.box('form').keys.toList();
 
   RxBool isLoading = false.obs;
 
@@ -31,10 +26,6 @@ class HomeController extends GetxController {
 
   void hideProgressIndicator() {
     isLoading.value = false;
-  }
-
-  void openBox() async {
-    formBox = await Hive.openBox('form');
   }
 
   //make function for logout
@@ -84,7 +75,7 @@ class HomeController extends GetxController {
       final token = authcontroller.token1.value;
       final id = userdata['id'];
       final response = await http.get(
-        Uri.parse('http://192.168.129.154:8001/api/jadwal/$id'),
+        Uri.parse('http://192.168.1.7:8001/api/jadwal/$id'),
         headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode == 200) {
