@@ -7,15 +7,20 @@ import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.
 class OSMPage extends StatelessWidget {
   final LocationService locationService = LocationService();
   var formController = Get.put(FormController());
+  final double lat;
+  final double lng;
+
+  // make parameter lat lang
+  OSMPage({Key? key, required this.lat, required this.lng}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OpenStreetMapSearchAndPick(
-      center: LatLong(-6.2088, 106.8456),
+      center: LatLong(lat, lng),
       buttonColor: Colors.blue,
-      buttonText: 'Set Current Location',
+      buttonText: 'Lihat Lokasi di Google Maps',
       onPicked: (pickedData) {
-        formController.valueLocation(pickedData.address);
+        formController.launchMap(lat, lng);
       },
       onGetCurrentLocationPressed: locationService.getPosition,
     );

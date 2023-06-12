@@ -51,6 +51,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_native_splash: ^2.2.19
   http: ^0.13.6
+  map_launcher: ^2.5.0+1
   
   
 

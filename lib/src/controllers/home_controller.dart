@@ -84,7 +84,7 @@ class HomeController extends GetxController {
       final token = authcontroller.token1.value;
       final id = userdata['id'];
       final response = await http.get(
-        Uri.parse('http://192.168.1.7:8001/api/jadwal/$id'),
+        Uri.parse('http://192.168.129.154:8001/api/jadwal/$id'),
         headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode == 200) {

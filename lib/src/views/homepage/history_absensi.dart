@@ -49,10 +49,11 @@ class HistoryPage extends StatelessWidget {
               ? Center(child: CircularProgressIndicator())
               : Expanded(
                   child: ListView.builder(
-                    itemCount: formController.formBox.length,
+                    itemCount: controller.jadwalList.length,
                     itemBuilder: (context, index) {
                       final jadwal = controller.jadwalList[index];
-                      return jadwal.status == "sudah_absen"
+                      return jadwal.status == "sudah_absen" ||
+                              jadwal.status == "izin"
                           ? Container(
                               margin: EdgeInsets.fromLTRB(24, 5, 24, 8),
                               child: Container(
@@ -66,33 +67,17 @@ class HistoryPage extends StatelessWidget {
                                   ),
                                   child: Stack(
                                     children: [
-                                      jadwal.status == "belum_absen"
-                                          ? Positioned(
-                                              child: Container(
-                                              width: 23,
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(16.0),
-                                                  bottomLeft:
-                                                      Radius.circular(16.0),
-                                                ),
-                                              ),
-                                            ))
-                                          : Positioned(
-                                              child: Container(
-                                              width: 23,
-                                              decoration: BoxDecoration(
-                                                color: HexColor('6DB351'),
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(16.0),
-                                                  bottomLeft:
-                                                      Radius.circular(16.0),
-                                                ),
-                                              ),
-                                            )),
+                                      Positioned(
+                                          child: Container(
+                                        width: 23,
+                                        decoration: BoxDecoration(
+                                          color: HexColor('6DB351'),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(16.0),
+                                            bottomLeft: Radius.circular(16.0),
+                                          ),
+                                        ),
+                                      )),
                                       Positioned(
                                         top: 10,
                                         left: 35,
@@ -106,13 +91,35 @@ class HistoryPage extends StatelessWidget {
                                       ),
                                       Positioned(
                                         top: 40,
-                                        left: 35,
-                                        child: Text(
-                                          jadwal.namaMasjid,
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white),
+                                        left: 40,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              jadwal.namaMasjid,
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white),
+                                            ),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 5)),
+                                            Icon(
+                                              Icons.location_on,
+                                              color: Colors.red,
+                                              size: 12,
+                                            ),
+                                            GestureDetector(
+                                              child: Text(
+                                                'Lokasi',
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white),
+                                              ),
+                                              onTap: () {},
+                                            )
+                                          ],
                                         ),
                                       ),
                                       Positioned(
@@ -194,9 +201,7 @@ class HistoryPage extends StatelessWidget {
                                     ],
                                   )),
                             )
-                          : Container(
-                              child: Text('Tidak Ada Riwayat'),
-                            );
+                          : Container();
                     },
                   ),
                 ))

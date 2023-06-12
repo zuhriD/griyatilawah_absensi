@@ -71,12 +71,37 @@ class listview_absensi extends StatelessWidget {
                               Positioned(
                                 top: 40,
                                 left: 35,
-                                child: Text(
-                                  jadwal.namaMasjid,
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      jadwal.namaMasjid,
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
+                                    ),
+                                    Padding(padding: EdgeInsets.only(left: 5)),
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.red,
+                                      size: 12,
+                                    ),
+                                    GestureDetector(
+                                      child: Text(
+                                        'Lokasi',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                      onTap: () {
+                                        formController.showLokasiMasjid(
+                                            context,
+                                            jadwal.latitudeMasjid,
+                                            jadwal.longitudeMasjid);
+                                      },
+                                    )
+                                  ],
                                 ),
                               ),
                               Positioned(
