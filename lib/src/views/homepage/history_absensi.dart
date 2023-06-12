@@ -117,7 +117,12 @@ class HistoryPage extends StatelessWidget {
                                                     fontWeight: FontWeight.w600,
                                                     color: Colors.white),
                                               ),
-                                              onTap: () {},
+                                              onTap: () {
+                                                formController.showLokasiMasjid(
+                                                    context,
+                                                    jadwal.latitudeMasjid,
+                                                    jadwal.longitudeMasjid);
+                                              },
                                             )
                                           ],
                                         ),

@@ -4,9 +4,7 @@ import 'package:workmanager/workmanager.dart';
 @pragma('vm:entry-point')
 void callBackDispatcher() {
   Workmanager().executeTask((task, inputData) {
-    NotificationService().showNotification(
-        title: "Jangan Lupa Absensi",
-        body: "Yuk! Lihat jadwal yang belum absen");
+    NotificationService().showPrayerTimeNotification();
     return Future.value(true);
   });
 }

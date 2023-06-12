@@ -132,7 +132,10 @@ class listview_absensi extends StatelessWidget {
                                       top: 30,
                                       right: 20,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          formController.showAbsensi(
+                                              context, jadwal.id);
+                                        },
                                         child: Text('Absen'),
                                         style: ElevatedButton.styleFrom(
                                           primary: HexColor('6DB351'),

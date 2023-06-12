@@ -39,4 +39,30 @@ class NotificationService {
     return flutterLocalNotificationsPlugin.show(
         id, title, body, await notificationDetails());
   }
+
+  void showPrayerTimeNotification() async {
+    // Get the current time
+    DateTime currentTime = DateTime.now();
+
+    // Set the prayer time for Subuh (example: 04:00 AM)
+    DateTime subuhTime = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      4, // Hour
+      0, // Minute
+    );
+
+    // Calculate the duration until Subuh prayer time
+    Duration durationUntilSubuh = subuhTime.difference(currentTime);
+
+    // Check if it's time for Subuh prayer
+    if (durationUntilSubuh.inMinutes <= 0) {
+      await flutterLocalNotificationsPlugin.show(
+          0, // Notification ID
+          'Prayer Time',
+          'It\'s time for Subuh prayer!', // Notification message
+          await notificationDetails());
+    }
+  }
 }
